@@ -5,7 +5,7 @@
     <packaging>war</packaging>
     <version>1</version>
 
-    <groupId>com.hansolutions</groupId>
+    <groupId>ca.hansolutions</groupId>
     <artifactId>web</artifactId>
 
     <properties>

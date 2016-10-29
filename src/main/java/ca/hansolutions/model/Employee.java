@@ -1,4 +1,4 @@
-package com.hansolutions.model;
+package ca.hansolutions.model;
 
 import org.springframework.stereotype.Component;
 

@@ -1,7 +1,7 @@
-package com.hansolutions.controller;
+package ca.hansolutions.controller;
 
 import com.google.appengine.api.datastore.*;
-import com.hansolutions.model.Employee;
+import ca.hansolutions.model.Employee;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
