@@ -42,5 +42,14 @@
         </c:forEach>
     </table>
 </div>
+<form action="/gcs/images/wo" method="post" enctype="multipart/form-data">
+    <input type="file" name="image"/>
+    <input type="submit" value=“submit”>
+</form>
+
+<div class="form-group col-sm-10 col-sm-offset-2">
+    <img src="${imageUrl}"
+         onerror="this.src='https://storage.cloud.google.com/water-q-canada.appspot.com/default.jpeg'">
+</div>
 </body>
 </html>
