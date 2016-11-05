@@ -42,7 +42,7 @@
         </c:forEach>
     </table>
 </div>
-<form action="/gcs/images/wo" method="post" enctype="multipart/form-data">
+<form action="/gcs/images/" method="post" enctype="multipart/form-data">
     <input type="file" name="image"/>
     <input type="submit" value=“submit”>
 </form>

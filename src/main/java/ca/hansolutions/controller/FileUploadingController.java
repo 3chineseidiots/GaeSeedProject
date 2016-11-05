@@ -4,6 +4,10 @@ import com.google.appengine.api.blobstore.BlobKey;
 import com.google.appengine.api.blobstore.BlobstoreService;
 import com.google.appengine.api.blobstore.BlobstoreServiceFactory;
 import com.google.appengine.tools.cloudstorage.*;
+import org.apache.commons.fileupload.FileItemIterator;
+import org.apache.commons.fileupload.FileItemStream;
+import org.apache.commons.fileupload.FileUploadException;
+import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -26,6 +30,7 @@ public class FileUploadingController {
 
     public static final boolean SERVE_USING_BLOBSTORE_API = false;
     public static final String BUCKET_NAME = "zaomai-1332.appspot.com";
+    public static final String HTTPS_STORAGE_CLOUD_GOOGLE_COM = "https://storage.cloud.google.com/";
 
     /**
      * This is where backoff parameters are configured. Here it is aggressively retrying with
@@ -37,7 +42,9 @@ public class FileUploadingController {
             .totalRetryPeriodMillis(15000)
             .build());
 
-    /**Used below to determine the size of chucks to read in. Should be > 1kb and < 10MB */
+    /**
+     * Used below to determine the size of chucks to read in. Should be > 1kb and < 10MB
+     */
     private static final int BUFFER_SIZE = 2 * 1024 * 1024;
 
     @RequestMapping(value = "/images", method = RequestMethod.GET)
@@ -59,30 +66,33 @@ public class FileUploadingController {
 
     }
 
-    @RequestMapping(value = "/images/{fileNameString}", method = RequestMethod.POST)
+    @RequestMapping(value = "/images/", method = RequestMethod.POST)
     @ResponseStatus(HttpStatus.CREATED)
-    public String uploadProfileImage(Map<String, Object> map, HttpServletRequest req, @PathVariable String fileNameString) throws IOException {
+    public String uploadProfileImage(Map<String, Object> map, HttpServletRequest req) {
 
         //for acl, we could use "public-read" or "private-project",
 //        GcsFileOptions instance = new GcsFileOptions.Builder().mimeType("image/jpeg").acl("public-read").build();
         GcsFileOptions fileOptions = new GcsFileOptions.Builder().mimeType("image/jpeg").build();
 
-        GcsFilename fileName = new GcsFilename(BUCKET_NAME, fileNameString);
-        GcsOutputChannel outputChannel;
-        outputChannel = gcsService.createOrReplace(fileName, fileOptions);
+        String fileNameString = null;
+        try {
+            FileItemIterator fileItemIterator = new ServletFileUpload().getItemIterator(req);
+            while (fileItemIterator.hasNext()) {
+                FileItemStream fileItemStream = fileItemIterator.next();
+                fileNameString = fileItemStream.getName();
+                GcsFilename gcsFilename = new GcsFilename(BUCKET_NAME, fileNameString);
+                GcsOutputChannel outputChannel = gcsService.createOrReplace(gcsFilename, fileOptions);
+                InputStream inputStream = fileItemStream.openStream();
+                copy(inputStream, Channels.newOutputStream(outputChannel));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
-        Part filePart = req.getPart("image"); // Retrieves <input type="file" name="file">
-        InputStream fileContent = filePart.getInputStream();
-
-        copy(fileContent, Channels.newOutputStream(outputChannel));
-
-        String urlPrefix = "https://storage.cloud.google.com/";
-        StringBuilder imageUrl = new StringBuilder(urlPrefix).append(BUCKET_NAME).append("/").append(fileNameString);
-
+        StringBuilder imageUrl = new StringBuilder(HTTPS_STORAGE_CLOUD_GOOGLE_COM).append(BUCKET_NAME).append("/").append(fileNameString);
         map.put("imageUrl", imageUrl.toString());
 
         return "mainpage";
-
     }
 
     private GcsFilename getFileName(HttpServletRequest req) {
