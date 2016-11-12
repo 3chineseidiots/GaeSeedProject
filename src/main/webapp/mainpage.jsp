@@ -17,19 +17,20 @@
         <table>
             <tr>
                 <td>First Name :</td>
-                <td><input type="text" name="firstName"/></td>
+                <td><input type="text" id="firstName" name="firstName"/></td>
             </tr>
             <tr>
                 <td>Last Name :</td>
-                <td><input type="text" name="lastName"/></td>
+                <td><input type="text" id="lastName" name="lastName"/></td>
             </tr>
             <tr>
                 <td></td>
-                <td><input type="submit" value="Add Employee"/></td>
+                <td><input type="submit" id="addButton" value="Add Employee"/></td>
             </tr>
         </table>
     </form>
 </div>
+<div id="message">${message}</div>
 <div class="list_employee">
     <table>
         <c:forEach items="${employeeList}" var="each">

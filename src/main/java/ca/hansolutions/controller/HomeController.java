@@ -33,7 +33,6 @@ public class HomeController {
             );
         }
 
-
         map.put("employeeList", employeeList);
         return "mainpage";
     }
@@ -48,8 +47,7 @@ public class HomeController {
 
         datastoreService.put(entity);
 
-
-        map.put("val1", "val1");
-        return "redirect:/";
+        map.put("message", "User added successfully :" + firstName);
+        return "mainpage";
     }
 }
