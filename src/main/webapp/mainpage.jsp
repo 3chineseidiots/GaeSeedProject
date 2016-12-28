@@ -31,6 +31,9 @@
     </form>
 </div>
 <div id="message">${message}</div>
+
+<hr>
+
 <div class="list_employee">
     <table>
         <c:forEach items="${employeeList}" var="each">
@@ -52,5 +55,11 @@
     <img src="${imageUrl}"
          onerror="this.src='https://storage.cloud.google.com/water-q-canada.appspot.com/default.jpeg'">
 </div>
+<hr>
+<form action="/email/send/" method="post">
+    Send email to <input type="text" name="receiverUsername"/> whose email address is <input type="text" name="receiverAddress"/> <br>
+    Title of the email is <input type="text" name="title"/> and the content is <input type="text" name="content"/>
+    <input type="submit" value="submit"/>
+</form>
 </body>
 </html>

@@ -2,6 +2,8 @@ package ca.hansolutions.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 import org.springframework.web.servlet.config.annotation.DefaultServletHandlerConfigurer;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
@@ -10,19 +12,26 @@ import org.springframework.web.servlet.view.InternalResourceViewResolver;
 
 @Configuration
 @EnableWebMvc
-public class AppConfig extends WebMvcConfigurerAdapter{
-	@Bean
-	public InternalResourceViewResolver viewResolver() {
+@PropertySource(value = "classpath:application.properties")
+public class AppConfig extends WebMvcConfigurerAdapter {
 
-		InternalResourceViewResolver iRVR = new InternalResourceViewResolver();
-		iRVR.setPrefix("/");
-		iRVR.setSuffix(".jsp");
-		return iRVR;
+    @Bean
+    public InternalResourceViewResolver viewResolver() {
 
-	}
-	@Override
-	public void configureDefaultServletHandling(
-			DefaultServletHandlerConfigurer configurer) {
-		configurer.enable();
-	}
+        InternalResourceViewResolver iRVR = new InternalResourceViewResolver();
+        iRVR.setPrefix("/");
+        iRVR.setSuffix(".jsp");
+        return iRVR;
+    }
+
+    @Bean
+    public static PropertySourcesPlaceholderConfigurer placeholderConfigurer() {
+        return new PropertySourcesPlaceholderConfigurer();
+    }
+
+    @Override
+    public void configureDefaultServletHandling(DefaultServletHandlerConfigurer configurer) {
+
+        configurer.enable();
+    }
 }
