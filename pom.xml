@@ -9,6 +9,7 @@
     <artifactId>web</artifactId>
 
     <properties>
+        <appengine.app.id>zaomai-1332</appengine.app.id>
         <appengine.app.version>1</appengine.app.version>
         <jackson.version>2.8.5</jackson.version>
         <mockito.version>2.0.2-beta</mockito.version>

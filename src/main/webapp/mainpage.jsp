@@ -45,7 +45,7 @@
 </div>
 <form action="/gcs/images/" method="post" enctype="multipart/form-data">
     <input type="file" name="image"/>
-    <input type="submit" value=“submit”>
+    <input type="submit" value="submit">
 </form>
 
 <div class="form-group col-sm-10 col-sm-offset-2">
